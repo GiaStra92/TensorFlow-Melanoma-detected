@@ -51,4 +51,8 @@ Queste operazioni sono essenziali per permettere alle reti neurali di apprendere
 Considerando che lavoriamo con immagini a colori, è essenziale incorporare questa informazione nella nostra progettazione. Pertanto, la forma di input sarà (150, 150, 3), dove il valore 3 rappresenta i tre canali di colore. Successivamente, vedremo come garantire che tutte le nostre immagini siano conformi a questa dimensione quando sfruttiamo ImageDataGenerator.
 
 Ora procediamo con l'implementazione dell'architettura della rete neurale.
+Nota bene: il seguente codice viene eseguito su Google Colab dato che richiede molte risorse computazionali.
+
+installiamo la libreria opendataset
+
 
