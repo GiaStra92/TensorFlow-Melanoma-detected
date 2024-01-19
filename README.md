@@ -44,7 +44,7 @@ Queste operazioni sono essenziali per permettere alle reti neurali di apprendere
 ![image](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/01ef33b5-01c0-49c1-aa72-2e55ebcb64c6)
 
 
-**Creazione del modello **
+**Creazione del modello:**
 
 È cruciale notare che è fondamentale fornire al modello immagini con dimensioni uniformi. La scelta di queste dimensioni è arbitraria, e per questo specifico modello abbiamo optato per immagini ridimensionate a 150x150 pixel, rendendole così tutte quadrate.
 
@@ -55,4 +55,20 @@ Nota bene: il seguente codice viene eseguito su Google Colab dato che richiede m
 
 installiamo la libreria opendataset
 
+<img width="1440" alt="image" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/b1e097e4-71b5-48b2-9f99-553db1b07014">
+
+ 
+ scarichiamo il dataset vi ricordo che avrete bisogno della api-key di kaggle
+ 
+<img width="1376" alt="Screenshot 2024-01-19 alle 15 45 18" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/65972a27-f2d1-4485-aa04-7a2a9f71d7da">
+
+
+Questo è un paragrafo normale.
+
+    // Questo è un blocco di codice indentato
+    function esempio() {
+        console.log("Hello, World!");
+    }
+
+Continua con il paragrafo successivo.
 
