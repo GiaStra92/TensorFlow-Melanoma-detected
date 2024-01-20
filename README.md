@@ -62,13 +62,99 @@ installiamo la libreria opendataset
  
 <img width="1376" alt="Screenshot 2024-01-19 alle 15 45 18" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/65972a27-f2d1-4485-aa04-7a2a9f71d7da">
 
+```
 
-Questo è un paragrafo normale.
+import os
+# importante rinominare path melanoma/DermMel/train_sep in :
+# /content/melanoma/DermMel/train
 
-    // Questo è un blocco di codice indentato
-    function esempio() {
-        console.log("Hello, World!");
-    }
 
-Continua con il paragrafo successivo.
 
+
+import os
+
+current_path = '/content/melanoma/DermMel/train_sep'
+new_path = '/content/melanoma/DermMel/train'
+
+if not os.path.exists(new_path):
+   
+    os.rename(current_path, new_path)
+    print(f"La cartella è stata rinominata da {current_path} a {new_path}")
+else:
+    print(f"Il percorso di destinazione {new_path} esiste già. Non è necessario rinominare la cartella.")
+
+
+
+
+
+# cartelle di apprendimento e validazione
+
+base_dir = '/content/melanoma/DermMel'
+train_dir = os.path.join(base_dir, 'train')
+validation_dir = os.path.join(base_dir, 'valid')
+
+# puntiamo alle cartelle di Melanoma e NotMelanoma per il training
+train_Melanoma_dir = os.path.join(train_dir, 'Melanoma')
+train_NotMelanoma_dir = os.path.join(train_dir, 'NotMelanoma')
+
+# puntiamo alle cartelle di Melanoma e NotMelanoma per la validazione
+validation_Melanoma_dir = os.path.join(validation_dir, 'Melanoma')
+validation_NotMelanoma_dir = os.path.join(validation_dir, 'NotMelanoma')
+
+
+
+
+
+import tensorflow as tf
+
+# Creiamo un modello sequenziale
+model = tf.keras.models.Sequential([
+    # Primo strato di convoluzione con 16 filtri 3x3, attivazione ReLU e dimensione dell'input 150x150x3
+    tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(150, 150, 3)),
+
+    # Strato di MaxPooling 2x2
+    tf.keras.layers.MaxPooling2D(2,2),
+
+    # Secondo strato di convoluzione con 32 filtri 3x3 e attivazione ReLU
+    tf.keras.layers.Conv2D(32, (3,3), activation='relu'),
+
+    # Altro strato di MaxPooling 2x2
+    tf.keras.layers.MaxPooling2D(2,2),
+
+    # Terzo strato di convoluzione con 64 filtri 3x3 e attivazione ReLU
+    tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
+
+    # Ulteriore strato di MaxPooling 2x2
+    tf.keras.layers.MaxPooling2D(2,2),
+
+    # Appiattiamo il risultato per passarlo ad uno strato denso
+    tf.keras.layers.Flatten(),
+
+    # Strato denso con 512 neuroni e attivazione ReLU
+    tf.keras.layers.Dense(512, activation='relu'),
+
+    # Strato di output con un singolo neurone e attivazione sigmoide
+    tf.keras.layers.Dense(1, activation='sigmoid')
+    #output 0 benigno 1 maligno
+])
+
+# Visualizziamo una panoramica del modello
+model.summary()
+
+
+
+```
+
+**output**
+
+<img width="1437" alt="image" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/633540a0-28f0-4492-9cd1-d97a6d365485">
+
+Output Shape" in relazione al primo strato convoluzionale. Quando osserviamo che l'output shape è 148x148x64, dobbiamo considerare diversi aspetti.
+
+Innanzitutto, come hai giustamente notato, l'immagine in input è di dimensioni 150x150. La riduzione di 1 pixel su ciascun lato dell'immagine durante la convoluzione è dovuta all'utilizzo di un filtro (kernel) di dimensione 3x3. Questo filtro scorre sull'immagine con passi (stride) di default, solitamente 1 pixel alla volta, riducendo così la dimensione dell'output.
+
+Per capire meglio, consideriamo il centro del filtro 3x3. Se immaginiamo questo filtro posizionato sull'immagine, noteremo che il suo centro coincide con un punto sull'immagine. Tuttavia, nei bordi dell'immagine, non c'è spazio sufficiente per posizionare completamente il filtro senza superare i bordi. Quindi, per mantenere la dimensione dell'output compatibile con l'input, perdiamo un pixel su ciascun lato.
+
+Quanto al numero 64 nell'output shape, rappresenta il numero di filtri (o kernel) applicati. Ogni filtro estrae differenti caratteristiche dall'immagine. Quindi, in questo caso, abbiamo 64 filtri convoluzionali applicati all'immagine di input, ognuno dei quali produce un'immagine di output 148x148.
+
+In breve, l'output shape 148x148x64 nel primo strato convoluzionale indica che stiamo ottenendo 64 diverse immagini di output (o feature maps), ciascuna di dimensioni 148x148, applicando filtri 3x3 all'immagine di input di dimensioni 150x150. Questo processo di convoluzione aiuta la rete a identificare e catturare diverse caratteristiche dell'immagine durante le fasi iniziali del processo di apprendimento.
