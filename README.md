@@ -161,9 +161,9 @@ In breve, l'output shape 148x148x64 nel primo strato convoluzionale indica che s
 
 Dopo l'applicazione della prima convoluzione, osserviamo la successiva riduzione delle dimensioni dell'immagine attraverso uno strato di max pooling, che dimezza la sua dimensione. Questo processo continua iterativamente fino a raggiungere lo strato di flatten, il quale prende l'output a quel punto e lo trasforma in un singolo vettore.
 
-Successivamente, questo vettore viene passato attraverso uno strato denso composto da 512 neuroni. Infine, la rete termina con un singolo neurone di output, che produce un valore binario: 0 o 1.
+Successivamente, questo vettore viene passato attraverso uno strato denso composto da 512 neuroni. Infine, la rete termina con un singolo neurone di output, che produce un valore binario: 0 o 1 (benigno o maligno).
 
-Per dichiarare a TensorFlow che la costruzione dell'architettura del modello è completa, è necessario utilizzare il comando compile. In questo caso, stiamo utilizzando l'ottimizzatore Adam, una funzione di loss di crossentropia binaria e l'accuratezza come metrica di performance.
+In questo caso, stiamo utilizzando l'ottimizzatore Adam, una funzione di loss di crossentropia binaria e l'accuratezza come metrica di performance.
 
 ```python
 
@@ -206,7 +206,7 @@ Saranno creati due generatori distinti: uno dedicato all'addestramento e l'altro
 
 In TensorFlow, l'utilizzo di ImageDataGenerator semplifica notevolmente queste operazioni. La sua potenza risiede nella capacità di generare automaticamente le etichette per le immagini, basandosi sulla struttura gerarchica e sulla nomenclatura delle cartelle contenenti le immagini.
 
-In sintesi, l'intero processo di preprocessing delle immagini si basa su una standardizzazione delle dimensioni, la conversione dei pixel in formato float64 e la normalizzazione dei valori pixel nell'intervallo [0, 1]. ImageDataGenerator svolge un ruolo fondamentale, semplificando ulteriormente il processo grazie alla sua capacità di generare etichette in modo automatico, considerando la struttura delle cartelle.
+In sintesi, l'intero processo di preprocessing delle immagini si basa su una standardizzazione delle dimensioni, la conversione dei pixel in formato float64 e la normalizzazione dei valori pixel nell'intervallo [0, 1]. ImageDataGenerator svolge un ruolo fondamentale, semplificando ulteriormente il processo grazie alla sua capacità di generare etichette in modo automatico, considerando la struttura delle seguenti cartelle.
 
 
 ![Senza titolo](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/324787c1-4b6f-4e24-a67f-14833fd6d9f6)
@@ -232,3 +232,26 @@ validation_generator =  test_datagen.flow_from_directory(validation_dir,
                                                          class_mode='binary',
                                                          target_size=(150, 150))
 ```
+
+
+
+**Il Viaggio dell'Addestramento: 15 Epoche di Apprendimento Profondo**
+
+L'avvincente fase di addestramento del nostro modello ha inizio, con l'obiettivo di plasmare le sue abilità predittive. Questo processo coinvolge 334 steps per epoca, basati sul batch size del nostro generatore di addestramento. Nel corso di 15 epoche, il modello assorbirà le informazioni dal set di 8903 immagini, affinando le sue capacità predittive.
+
+Il codice di addestramento si configura nel seguente modo:
+
+```python
+history = model.fit(
+    train_generator,  # Generatore per il training
+    steps_per_epoch=334,  # Numero di steps per epoca basato sul batch size
+    epochs=15,  # Numero di epoche
+    validation_data=validation_generator,  # Generatore per la validazione
+    validation_steps=111,  # Numero di steps per epoca di validazione basato sul batch size
+    verbose=2  # Livello di verbosità
+)
+```
+
+Durante questo percorso, il modello apprenderà dai dati del generatore di addestramento, mentre la sua coerenza verrà valutata attraverso il generatore di validazione. Il parametro `verbose=2` garantirà una dettagliata visualizzazione delle performance del modello, offrendoci una finestra privilegiata sul suo processo di apprendimento.
+
+In sintesi, ci immergeremo in 15 epoche di apprendimento profondo, dove il nostro modello acquisirà gradualmente la capacità di effettuare predizioni sempre più accurate sulla base del ricco insieme di dati fornito dal generatore di addestramento.
