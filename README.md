@@ -158,3 +158,77 @@ Per capire meglio, consideriamo il centro del filtro 3x3. Se immaginiamo questo 
 Quanto al numero 64 nell'output shape, rappresenta il numero di filtri (o kernel) applicati. Ogni filtro estrae differenti caratteristiche dall'immagine. Quindi, in questo caso, abbiamo 64 filtri convoluzionali applicati all'immagine di input, ognuno dei quali produce un'immagine di output 148x148.
 
 In breve, l'output shape 148x148x64 nel primo strato convoluzionale indica che stiamo ottenendo 64 diverse immagini di output (o feature maps), ciascuna di dimensioni 148x148, applicando filtri 3x3 all'immagine di input di dimensioni 150x150. Questo processo di convoluzione aiuta la rete a identificare e catturare diverse caratteristiche dell'immagine durante le fasi iniziali del processo di apprendimento.
+
+Dopo l'applicazione della prima convoluzione, osserviamo la successiva riduzione delle dimensioni dell'immagine attraverso uno strato di max pooling, che dimezza la sua dimensione. Questo processo continua iterativamente fino a raggiungere lo strato di flatten, il quale prende l'output a quel punto e lo trasforma in un singolo vettore.
+
+Successivamente, questo vettore viene passato attraverso uno strato denso composto da 512 neuroni. Infine, la rete termina con un singolo neurone di output, che produce un valore binario: 0 o 1.
+
+Per dichiarare a TensorFlow che la costruzione dell'architettura del modello è completa, è necessario utilizzare il comando compile. In questo caso, stiamo utilizzando l'ottimizzatore Adam, una funzione di loss di crossentropia binaria e l'accuratezza come metrica di performance.
+
+```python
+
+
+# Compilazione del modello
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+```
+
+La funzione di perdita binaria o "binary_crossentropy" è una metrica comune utilizzata nei problemi di classificazione binaria, in cui l'obiettivo è predire se un'istanza appartiene a una delle due classi, di solito etichettate come 0 e 1. Questa funzione di perdita è particolarmente adatta per i modelli di machine learning che utilizzano l'output sigmoideo.
+
+**Ecco una breve spiegazione dei principali concetti di "binary_crossentropy"**
+
+1. **Problema di Classificazione Binaria:** La binary crossentropy è specificamente progettata per problemi di classificazione binaria, in cui ogni esempio di addestramento può appartenere solo a una delle due classi.
+
+2. **Modello Sigmoideo:** La binary crossentropy è spesso associata a modelli che utilizzano la funzione di attivazione sigmoidea nell'ultimo strato. La funzione sigmoidea comprime i valori in un intervallo tra 0 e 1, producendo probabilità che possono essere interpretate come la probabilità che un'istanza appartenga alla classe positiva (1).
+
+3. **Calcolo della Perdita:** La binary crossentropy misura la discrepanza tra la distribuzione di probabilità prevista dal modello e la distribuzione di probabilità reale dei dati di addestramento. Per un singolo esempio, la formula della binary crossentropy è:
+   
+  <img width="451" alt="image" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/14511964-78ac-4815-a063-b3297403939f">
+
+
+   dove:
+   - \(y\) è l'etichetta reale (0 o 1).
+   - \(p\) è la probabilità prevista dal modello che l'esempio appartenga alla classe 1.
+
+4. **Ottimizzazione:** L'obiettivo durante l'addestramento del modello è minimizzare la binary crossentropy. Questo viene fatto aggiustando i pesi della rete neurale utilizzando tecniche di ottimizzazione come l'algoritmo di ottimizzazione Adam.
+
+5. **Interpretazione:** Un valore basso di binary crossentropy indica che le previsioni del modello sono vicine alle etichette reali, mentre un valore alto indica una discrepanza significativa. L'obiettivo è ridurre la perdita durante l'addestramento, migliorando così la capacità del modello di fare previsioni accurate.
+
+In sintesi, la binary crossentropy è una misura della discrepanza tra le previsioni del modello e le etichette reali in problemi di classificazione binaria. Riducendo questa perdita durante l'addestramento, si migliora la capacità del modello di fare previsioni precise.
+
+
+**Preprocessing delle Immagini con ImageDataGenerator in TensorFlow**
+
+La fase successiva del processo coinvolge il preprocessing delle immagini per garantire la loro idoneità al modello. Le immagini saranno ridimensionate in modo uniforme, convertite in formato float64 e associate alle rispettive etichette (cioè, "benigno" o "maligno"). Successivamente, queste informazioni verranno fornite al modello.
+
+Saranno creati due generatori distinti: uno dedicato all'addestramento e l'altro alla validazione. Ciascun generatore effettuerà la conversione delle immagini in valori numerici normalizzati nell'intervallo compreso tra 0 e 255. Considerando che 255 rappresenta il massimo valore di intensità di un pixel, questo processo comporterà che un pixel con intensità massima di 255 diventerà 1, mentre un pixel "spento" sarà rappresentato da 0. I valori intermedi saranno opportunamente scalati tra 0 e 1.
+
+In TensorFlow, l'utilizzo di ImageDataGenerator semplifica notevolmente queste operazioni. La sua potenza risiede nella capacità di generare automaticamente le etichette per le immagini, basandosi sulla struttura gerarchica e sulla nomenclatura delle cartelle contenenti le immagini.
+
+In sintesi, l'intero processo di preprocessing delle immagini si basa su una standardizzazione delle dimensioni, la conversione dei pixel in formato float64 e la normalizzazione dei valori pixel nell'intervallo [0, 1]. ImageDataGenerator svolge un ruolo fondamentale, semplificando ulteriormente il processo grazie alla sua capacità di generare etichette in modo automatico, considerando la struttura delle cartelle.
+
+
+![Senza titolo](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/324787c1-4b6f-4e24-a67f-14833fd6d9f6)
+
+
+```python
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+
+# riscaliamo tutte le nostre immagini con il parametro rescale
+train_datagen = ImageDataGenerator(rescale = 1.0/255)
+test_datagen  = ImageDataGenerator(rescale = 1.0/255)
+
+# utilizziamo flow_from_directory per creare un generatore per il training
+train_generator = train_datagen.flow_from_directory(train_dir,
+                                                    batch_size=20,
+                                                    class_mode='binary',
+                                                    target_size=(150, 150))
+
+# utilizziamo flow_from_directory per creare un generatore per la validazione
+validation_generator =  test_datagen.flow_from_directory(validation_dir,
+                                                         batch_size=20,
+                                                         class_mode='binary',
+                                                         target_size=(150, 150))
+```
