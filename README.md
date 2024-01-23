@@ -17,7 +17,7 @@ Il set di dati è composto da 8.903 immagini di melanoma 8.902 immagini di non m
 Url dataset https://www.kaggle.com/datasets/drscarlat/melanoma il seguente dataset fa riferimento ha seguente link [link](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/DBW86T), vi ricordo che avete bisogno di API-key , per ottenere la seguente chiave basta registrarsi gratuitamente su https://www.kaggle.com. 
 
 **Informazioni sul set di dati**
-**Informazioni sul set di dati**
+
 
 Il set di dati originale è costituito dalle immagini HAM10k, acronimo di "Human Against Machine with 10,000 images," disponibile gratuitamente. Le immagini dermoscopiche all'interno del set di dati HAM10k sono state curate e normalizzate in termini di luminosità, colori, risoluzione, eccetera. La diagnosi effettiva è stata convalidata tramite istopatologia (come fonte di verità) in oltre il 50% dei casi, rappresentando il doppio rispetto ai set di dati precedenti sulle lesioni cutanee. Per le restanti lesioni, la diagnosi è stata basata sul consenso dei dermatologi.
 
@@ -33,8 +33,15 @@ L'aumento dei dati consente di esporre il modello a varie modifiche di un'immagi
 - 8.903 immagini di melanoma
 - 8.902 immagini di non melanoma
 
-Ulteriori dettagli sul processo di potenziamento possono essere trovati su HITalk [Link text Here]([https://link-url-here.org](https://histalk2.com/2019/01/16/machine-learning-primer-for-clinicians-part-12-2/))
-. 
+Ulteriori dettagli sul processo di potenziamento possono essere trovati su HITalk   [Link](https://www.kaggle.com/datasets/drscarlat/melanoma)
+
+
+
+![image](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/955559ae-a127-44dd-9c6a-b2dd885280c8)
+
+
+
+
 
 
 
@@ -59,18 +66,18 @@ La concezione fondamentale di una convoluzione si focalizza sull'accentuare spec
 ![image](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/1eb605af-94d0-409a-a6a1-4ce818bf90c6)
 _fonte immagine:_ https://www.developersmaggioli.it
  
-**Max Pooling:** Dopo la convoluzione, spesso segue il pooling, che riduce le dimensioni dell'immagine mantenendo le caratteristiche più prominenti. Il max pooling, in particolare, scorre un filtro attraverso l'immagine e seleziona il valore massimo all'interno di una finestra di valori (ad esempio, all'interno di una griglia 2x2). Questo non solo riduce la complessità computazionale per le operazioni successive ma conserva anche le caratteristiche più rilevanti che sono state evidenziate dalla convoluzione.
+**Max Pooling** Dopo la convoluzione, spesso segue il pooling, che riduce le dimensioni dell'immagine mantenendo le caratteristiche più prominenti. Il max pooling, in particolare, scorre un filtro attraverso l'immagine e seleziona il valore massimo all'interno di una finestra di valori (ad esempio, all'interno di una griglia 2x2). Questo non solo riduce la complessità computazionale per le operazioni successive ma conserva anche le caratteristiche più rilevanti che sono state evidenziate dalla convoluzione.
 
 Queste operazioni sono essenziali per permettere alle reti neurali di apprendere gerarchie di caratteristiche visive, da semplici texture e forme a oggetti complessi all'interno di immagini.
 
 ![image](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/01ef33b5-01c0-49c1-aa72-2e55ebcb64c6)
 
 
-**Creazione del modello:**
+**Creazione del modello**
 
 È cruciale notare che è fondamentale fornire al modello immagini con dimensioni uniformi. La scelta di queste dimensioni è arbitraria, e per questo specifico modello abbiamo optato per immagini ridimensionate a 150x150 pixel, rendendole così tutte quadrate.
 
-Considerando che lavoriamo con immagini a colori, è essenziale incorporare questa informazione nella nostra progettazione. Pertanto, la forma di input sarà (150, 150, 3), dove il valore 3 rappresenta i tre canali di colore. Successivamente, vedremo come garantire che tutte le nostre immagini siano conformi a questa dimensione quando sfruttiamo ImageDataGenerator.
+Considerando che lavoriamo con immagini a colori, è essenziale incorporare questa informazione nella nostra progettazione. Pertanto, la forma di input sarà (150, 150, 3), dove il valore 3 rappresenta i tre canali di colore RGB. Successivamente, vedremo come garantire che tutte le nostre immagini siano conformi a questa dimensione quando sfruttiamo ImageDataGenerator.
 
 Ora procediamo con l'implementazione dell'architettura della rete neurale.
 Nota bene: il seguente codice viene eseguito su Google Colab dato che richiede molte risorse computazionali.
@@ -167,7 +174,7 @@ model.summary()
 
 ```
 
-**output**
+
 
 <img width="1437" alt="image" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/633540a0-28f0-4492-9cd1-d97a6d365485">
 
@@ -196,7 +203,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 ```
 
-La funzione di perdita binaria o "binary_crossentropy" è una metrica comune utilizzata nei problemi di classificazione binaria, in cui l'obiettivo è predire se un'istanza appartiene a una delle due classi, di solito etichettate come 0 e 1. Questa funzione di perdita è particolarmente adatta per i modelli di machine learning che utilizzano l'output sigmoideo.
+La funzione di perdita binaria o "binary_crossentropy" è una metrica comune utilizzata nei problemi di classificazione binaria, in cui l'obiettivo è predire se un'istanza appartiene a una delle due classi, di solito etichettate come 0 e 1 (benigno maligno). Questa funzione di perdita è particolarmente adatta per i modelli di machine learning che utilizzano l'output sigmoideo.
 
 **Ecco una breve spiegazione dei principali concetti di "binary_crossentropy"**
 
