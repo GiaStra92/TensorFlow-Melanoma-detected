@@ -281,6 +281,170 @@ history = model.fit(
 )
 ```
 
-Durante questo percorso, il modello apprenderà dai dati del generatore di addestramento, mentre la sua coerenza verrà valutata attraverso il generatore di validazione. Il parametro `verbose=2` garantirà una dettagliata visualizzazione delle performance del modello, offrendoci una finestra privilegiata sul suo processo di apprendimento.
 
-In sintesi, ci immergeremo in 15 epoche di apprendimento profondo, dove il nostro modello acquisirà gradualmente la capacità di effettuare predizioni sempre più accurate sulla base del ricco insieme di dati fornito dal generatore di addestramento.
+
+
+**Esplorare le Rappresentazioni Neurali attraverso la Visualizzazione**
+
+Un aspetto affascinante nell'analisi delle reti neurali convoluzionali (CNN) è l'osservazione delle informazioni chiave estratte dalle immagini e delle rappresentazioni generate durante il passaggio attraverso i differenti strati della rete. In questo contesto, useremo un modello fornito da Keras per esplorare questo processo, fornendo all'architettura neurale input precedentemente utilizzati per l'addestramento.
+
+L'analisi delle rappresentazioni neurali offre una finestra privilegiata sull'elaborazione delle informazioni all'interno della rete. Ogni strato di una CNN svolge un ruolo specifico nell'identificare pattern e caratteristiche distintive. Possiamo osservare come l'immagine di input viene trasformata e rappresentata in maniera più astratta via via che attraversa i vari strati della rete.
+
+Questo processo di estrazione di feature è fondamentale nel comprendere come una CNN interpreta e categorizza le informazioni visive. Ad esempio, le prime layers possono essere specializzate nel riconoscere bordi e dettagli di basso livello, mentre le layers più profonde catturano feature complesse e astratte come forme e pattern specifici.
+
+Per esplorare ulteriormente le rappresentazioni neurali, possiamo utilizzare tecniche di visualizzazione come mappe di attivazione e filtri convoluzionali. Le mappe di attivazione evidenziano le regioni dell'immagine che hanno contribuito maggiormente all'attivazione di specifici neuroni, mentre i filtri convoluzionali ci permettono di visualizzare cosa la rete ha appreso durante l'addestramento.
+
+import numpy as np
+import matplotlib.pyplot as plt
+from tensorflow.keras.preprocessing import image
+
+```python
+# Addestra il tuo modello qui (model.fit(...))
+
+# Estrai i modelli per gli strati convoluzionali
+layer_outputs = [layer.output for layer in model.layers[:4]] # Modifica in base ai tuoi strati
+activation_model = tf.keras.models.Model(inputs=model.input, outputs=layer_outputs)
+base_dir = '/content/melanoma/DermMel/valid/Melanoma/AUG_0_1833.jpeg'
+# Carica l'immagine da visualizzare
+img = image.load_img(base_dir, target_size=(150, 150))
+img_tensor = image.img_to_array(img)
+img_tensor = np.expand_dims(img_tensor, axis=0)
+img_tensor /= 255.0
+
+# Calcola le attivazioni
+activations = activation_model.predict(img_tensor)
+
+# Funzione per visualizzare le attivazioni
+def display_activation(activations, col_size, row_size, act_index):
+    activation = activations[act_index]
+    # Ottieni il numero di filtri nello strato
+    num_filters = activation.shape[-1]
+
+    fig, ax = plt.subplots(row_size, col_size, figsize=(row_size*2.5,col_size*1.5))
+    for row in range(row_size):
+        for col in range(col_size):
+            ax[row][col].imshow(activation[0, :, :, row * col_size + col], cmap='viridis')
+            if row * col_size + col + 1 == num_filters:
+                # Interrompi se hai raggiunto il numero di filtri
+
+                return
+
+# visualizzare le attivazioni
+display_activation(activations, col_size=4, row_size=4, act_index=1)
+```
+
+Come la rete neurale vede il melanoma 
+![image](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/c54887c9-cfde-426f-a9d7-9a6e1214557e)
+
+Da notare come vengono messi in risalto assimmetria ,bordi ,colore ,diametro ,Evoluzione regola ABCDE per identificare un melanoma. Il metodo è stato descritto per la prima volta nel 1985 da Robert Friedman della New York University School of Medicine sulle pagine di CA: A Cancer Journal for Clinicians come regola ABCD; nel 2004 il metodo è stato rivisto in “ABCDE”.
+Queste caratteristiche estratte attraverso gli strati della rete giocano un ruolo cruciale nel consentire alla rete neurale di comprendere e identificare melanomi. Questa osservazione offre un'interessante prospettiva sulla capacità della rete di analizzare e riconoscere specifiche caratteristiche di lesioni cutanee.
+
+La visualizzazione delle rappresentazioni neurali è una pratica essenziale poiché ci consente di esplorare ciò che viene messo in evidenza durante le convoluzioni e le aggregazioni nei vari strati. Questo approccio fornisce un insight fondamentale per comprendere come la rete neurale interpreta le informazioni visive legate ai melanomi. La possibilità di individuare eventuali discrepanze o rilevare feature non pertinenti consente di affrontare potenziali errori nella predizione.
+
+Se la rete neurale, ad esempio, mettesse in risalto caratteristiche non rilevanti che contribuiscono a predizioni errate, questa analisi delle rappresentazioni diventa il primo punto di ispezione. In tal caso, è necessario eseguire un'analisi manuale per identificare e correggere queste distorsioni. L'ottimizzazione dell'architettura della rete diventa un passo cruciale per garantire che le rappresentazioni neurali siano in linea con le informazioni salienti per una corretta classificazione dei melanomi.
+
+**Valutazione del modello**
+
+in fine possiamo valutare il nostro modello.
+
+
+```python
+import matplotlib.pyplot as plt
+
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs = range(len(acc))
+
+# Plottiamo la accuracy con un grafico a punti
+plt.scatter(epochs, acc, label='Training Accuracy')
+plt.scatter(epochs, val_acc, label='Validation Accuracy')
+plt.title('Accuracy in training e validazione')
+plt.legend()
+plt.show()
+
+# Creiamo un nuovo grafico per la loss a punti
+plt.scatter(epochs, loss, label='Training Loss')
+plt.scatter(epochs, val_loss, label='Validation Loss')
+plt.title('Loss in training e validazione')
+plt.legend()
+plt.show()
+```
+
+
+
+![image](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/8c2f3343-648b-4dee-8b1a-9ba8f0c18f34)
+![image](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/70e2708d-676a-45e2-968e-90152fd3006a)
+
+
+
+**Predizioni su melanoma**
+
+Siamo arrivati alla fine , possiamo ora passare una immagine di test di melanoma o non melanoma per la predizione , in questo caso passo l'immagine che risiede nel segunte percorso /content/melanoma/DermMel/test/Melanoma/AUG_0_1524.jpeg 
+
+
+**melanoma maligno**
+
+
+
+![AUG_0_1524](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/20478457-0236-4421-a3d5-0ac59ec3615c) 
+
+
+
+```python
+import numpy as np
+from keras.preprocessing import image
+import tensorflow as tf
+
+
+
+# Inserimento manuale del percorso dell'immagine
+path = input("Inserisci il percorso dell'immagine: ")
+
+# Caricamento e preparazione dell'immagine
+img = image.load_img(path, target_size=(150, 150))  # Scala l'immagine alla dimensione target
+x = image.img_to_array(img)  # Converte l'immagine in un array
+x /= 255  # Normalizza i valori dei pixel
+x = np.expand_dims(x, axis=0)  # Aggiungi una dimensione per adattarsi all'input del modello
+model_path = '/content/save_model/rete-neurale_model.h5'
+
+# model = load_model('/content/save_model/rete-neurale_model.h5')
+model = tf.keras.models.load_model(model_path)
+
+# Esecuzione della predizione
+classes = model.predict(x, batch_size=10)
+
+print(classes[0])
+
+# Interpretazione del risultato
+if classes[0] > 0.5:
+    print(path.split("/")[-1] + " è benigno!")
+else:
+    print(path.split("/")[-1] + " è maligno!")
+```
+
+
+**output**
+
+<img width="1440" alt="image" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/3231ff44-4998-4b03-8f1b-d9292dc3254d">
+
+
+Secondo test con immagine persa a caso di melanoma beigno file di esempio /content/melanoma/DermMel/test/NotMelanoma/ISIC_0024778.jpg
+
+
+**Melanoma benigno**
+
+
+![ISIC_0024778](https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/b1b80f27-5495-4f6e-8501-defbe8dc8241)
+
+
+
+**output**
+
+
+
+<img width="1440" alt="image" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/082945e4-1a66-4729-bb29-df49528ac18e">
+
+
