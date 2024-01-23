@@ -299,7 +299,6 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing import image
 
 ```python
-# Addestra il tuo modello qui (model.fit(...))
 
 # Estrai i modelli per gli strati convoluzionali
 layer_outputs = [layer.output for layer in model.layers[:4]] # Modifica in base ai tuoi strati
