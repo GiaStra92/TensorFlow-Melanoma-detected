@@ -16,6 +16,28 @@ Affronteremo queste sfide tenendo presente che il deep learning richiede risorse
 Il set di dati è composto da 8.903 immagini di melanoma 8.902 immagini di non melanoma.
 Url dataset https://www.kaggle.com/datasets/drscarlat/melanoma il seguente dataset fa riferimento ha seguente link [link](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/DBW86T), vi ricordo che avete bisogno di API-key , per ottenere la seguente chiave basta registrarsi gratuitamente su https://www.kaggle.com. 
 
+**Informazioni sul set di dati**
+**Informazioni sul set di dati**
+
+Il set di dati originale è costituito dalle immagini HAM10k, acronimo di "Human Against Machine with 10,000 images," disponibile gratuitamente. Le immagini dermoscopiche all'interno del set di dati HAM10k sono state curate e normalizzate in termini di luminosità, colori, risoluzione, eccetera. La diagnosi effettiva è stata convalidata tramite istopatologia (come fonte di verità) in oltre il 50% dei casi, rappresentando il doppio rispetto ai set di dati precedenti sulle lesioni cutanee. Per le restanti lesioni, la diagnosi è stata basata sul consenso dei dermatologi.
+
+Invece di affrontare la classificazione di sette tipi di lesioni cutanee in un insieme fortemente sbilanciato, si è semplificato il compito concentrandosi sulla diagnosi di melanoma rispetto a non melanoma. Riassumendo le categorie sopra menzionate in due gruppi, il risultato è comunque un set di dati sbilanciato con:
+
+- 1.113 immagini di melanoma
+- 8.902 immagini di non melanoma
+
+Per affrontare questo squilibrio, è stato applicato l'aumento dei dati al gruppo di melanoma, portando il numero di immagini in modo che fosse simile al gruppo di non melanoma.
+
+L'aumento dei dati consente di esporre il modello a varie modifiche di un'immagine di melanoma. Ciò, a sua volta, permette al modello di apprendere e successivamente generalizzare, ad esempio, che un melanoma che punta a sinistra è comunque un melanoma se punta a destra. Il risultato è un set di dati bilanciato di 17.805 immagini dopo l'aumento dei dati nel gruppo di melanoma:
+
+- 8.903 immagini di melanoma
+- 8.902 immagini di non melanoma
+
+Ulteriori dettagli sul processo di potenziamento possono essere trovati su HITalk [Link text Here]([https://link-url-here.org](https://histalk2.com/2019/01/16/machine-learning-primer-for-clinicians-part-12-2/))
+. 
+
+
+
 **Breve Cenni convoluzioni e max pooling** 
 
 Le convoluzioni e il max pooling sono tecniche di elaborazione delle immagini fondamentali per i modelli di computer vision, specialmente nelle reti neurali convoluzionali (CNNs). Questi strumenti aiutano il modello a catturare e enfatizzare le caratteristiche salienti delle immagini, facilitando l'apprendimento di pattern complessi.
