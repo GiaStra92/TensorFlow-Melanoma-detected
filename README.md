@@ -433,7 +433,7 @@ else:
 <img width="1440" alt="image" src="https://github.com/GiaStra92/TensorFlow-Melanoma-detected/assets/140896994/3231ff44-4998-4b03-8f1b-d9292dc3254d">
 
 
-Secondo test con immagine persa a caso di melanoma beigno file di esempio /content/melanoma/DermMel/test/NotMelanoma/ISIC_0024778.jpg
+Secondo test con immagine di melanoma benigno file di esempio /content/melanoma/DermMel/test/NotMelanoma/ISIC_0024778.jpg
 
 
 **Melanoma benigno**
