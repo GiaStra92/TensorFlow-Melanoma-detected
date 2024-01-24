@@ -1,3 +1,24 @@
+**Premessa**
+
+Desidero esprimere la mia profonda gratitudine per aver reso pubblico il mio articolo al dott Andrea D'Agostino
+Data Science & Machine Learning Con sincera gratitudine Gianluca Stranges ,
+
+Il carcinoma della pelle si configura come la forma di neoplasia maligna più comune nell'uomo, spesso diagnosticato mediante osservazione visiva e screening clinico iniziale, seguiti da eventuali analisi dermoscopiche, biopsie ed esami istopatologici. L'automazione della classificazione delle lesioni cutanee attraverso l'analisi di immagini rappresenta una sfida significativa, data la complessità e la variabilità nell'aspetto delle lesioni.
+
+Il dataset utilizzato in questo contesto proviene dall'archivio ISIC (https://www.kaggle.com/datasets/drscarlat/melanoma) e comprende 8,903  immagini di nei benigni e 8,902 immagini di nei classificati come maligni. Tutte le immagini sono state uniformemente ridimensionate in formato RGB a bassa risoluzione. L'obiettivo di questo kernel è sviluppare un modello in grado di effettuare una classificazione visiva di un nevo come benigno o maligno.
+
+
+Le due classi di cancro della pelle oggetto di rilevamento sono:
+1. Benigno
+2. Maligno
+
+In questo kernel, sarà implementata una rete neurale convoluzionale utilizzando Keras con TensorFlow come backend. Successivamente, verrà condotta un'analisi dei risultati al fine di valutare l'utilità pratica del modello nell'identificazione di lesioni cutanee.
+
+
+
+
+
+
 # Classificazione di Melanoma in TensorFlow: Distinguere tra Maligno e Benigno con Intelligenza Artificiale
 
 ![](https://upload.wikimedia.org/wikipedia/commons/2/2d/Tensorflow_logo.svg)
